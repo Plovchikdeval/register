@@ -1,0 +1,15 @@
+{
+  "user": {
+    "username": "nloveuser",
+    "email": "nloveuser@gmail.com",
+    "discord": "nloveuser"
+  },
+  "subdomain": "nloverx",
+  "records": [
+    {
+      "type": "CNAME",
+      "name": "nloverx",
+      "value": "nloveuser.xyz"
+    }
+  ]
+}
