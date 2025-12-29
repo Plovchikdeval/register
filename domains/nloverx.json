@@ -4,11 +4,11 @@
     "email": "nloveuser@gmail.com",
     "discord": "nloveuser"
   },
-  "subdomain": "abuse",
+  "subdomain": "nloverx",
   "records": [
     {
       "type": "CNAME",
-      "name": "abuse.is-a-developer.live",
+      "name": "nloverx",
       "value": "nloveuser.xyz"
     }
   ]
