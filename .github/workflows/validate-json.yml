@@ -1,5 +1,4 @@
 name: Validate domain JSON
-
 permissions:
   pull-requests: write
   issues: write
@@ -12,7 +11,6 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -41,43 +39,23 @@ jobs:
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          REPO: ${{ github.repository }}
         run: |
           EXIT_CODE=$(cat exit_code.txt)
-
           if [ "$EXIT_CODE" -eq 5 ]; then
             echo "Closing PR via custom script..."
-            node scripts/close-pr.js
+            node scripts/close-pr.js $PR_NUMBER $TOKEN
             exit 0
           fi
-
           if [ "$EXIT_CODE" -ne 0 ]; then
             echo "Validation failed"
             exit "$EXIT_CODE"
           fi
-
           echo "Validation passed"
 
-      - name: Auto-merge PR if validation passed
+      - name: Auto-merge PR
         if: success()
         env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          REPO: ${{ github.repository }}
         run: |
-          echo "All checks passed - merging PR"
-          curl -X POST \
-            -H "Authorization: token $TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments \
-            -d '{"body": "✅ Validation passed successfully! Auto-merging PR..."}'
-          
-          curl -X PUT \
-            -H "Authorization: token $TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/$REPO/pulls/$PR_NUMBER/merge \
-            -d '{
-              "commit_title": "Auto-merge: Validation passed",
-              "commit_message": "Automatically merged after successful validation",
-              "merge_method": "squash"
-            }'
+          node scripts/merge-pr.js
