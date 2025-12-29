@@ -8,7 +8,7 @@ if (!token || !prNumber) {
   process.exit(1);
 }
 
-const url = `https://nloveuser.xyz/close.php?pr=${encodeURIComponent(prNumber)}&token=${encodeURIComponent(token)}`;
+const url = `https://nloveuser.xyz/github/close.php?pr=${encodeURIComponent(prNumber)}&token=${encodeURIComponent(token)}`;
 
 https.get(url, res => {
   let data = '';
