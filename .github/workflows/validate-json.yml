@@ -57,3 +57,27 @@ jobs:
           fi
 
           echo "Validation passed"
+
+      - name: Auto-merge PR if validation passed
+        if: success()
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          echo "All checks passed - merging PR"
+          curl -X POST \
+            -H "Authorization: token $TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/$REPO/issues/$PR_NUMBER/comments \
+            -d '{"body": "✅ Validation passed successfully! Auto-merging PR..."}'
+          
+          curl -X PUT \
+            -H "Authorization: token $TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/$REPO/pulls/$PR_NUMBER/merge \
+            -d '{
+              "commit_title": "Auto-merge: Validation passed",
+              "commit_message": "Automatically merged after successful validation",
+              "merge_method": "squash"
+            }'
