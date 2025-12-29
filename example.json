@@ -1,0 +1,71 @@
+{
+  "user": {
+    "username": "example_user",
+    "email": "user@example.com",
+    "discord": "example#0000"
+  },
+  "subdomain": "example",
+  "records": [
+    {
+      "type": "A",
+      "name": "example",
+      "value": "93.184.216.34"
+    },
+    {
+      "type": "AAAA",
+      "name": "example",
+      "value": "2606:2800:220:1:248:1893:25c8:1946"
+    },
+    {
+      "type": "CNAME",
+      "name": "www",
+      "value": "example.is-a.dev"
+    },
+    {
+      "type": "MX",
+      "name": "example",
+      "priority": 10,
+      "value": "mail.example.is-a.dev"
+    },
+    {
+      "type": "TXT",
+      "name": "example",
+      "value": "v=spf1 include:_spf.example.com ~all"
+    },
+    {
+      "type": "TXT",
+      "name": "_discord.example",
+      "value": "dh=verification_hash_here"
+    },
+    {
+      "type": "NS",
+      "name": "example",
+      "value": "ns1.example-dns.com"
+    },
+    {
+      "type": "NS",
+      "name": "example",
+      "value": "ns2.example-dns.com"
+    },
+    {
+      "type": "SRV",
+      "name": "_minecraft._tcp.example",
+      "priority": 0,
+      "weight": 5,
+      "port": 25565,
+      "value": "mc.example.is-a.dev"
+    },
+    {
+      "type": "CAA",
+      "name": "example",
+      "flag": 0,
+      "tag": "issue",
+      "value": "letsencrypt.org"
+    },
+    {
+      "type": "URL",
+      "name": "example",
+      "value": "https://example.is-a.dev"
+    }
+  ]
+}

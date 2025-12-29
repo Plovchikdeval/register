@@ -1,0 +1,59 @@
+name: Validate domain JSON
+
+permissions:
+  pull-requests: write
+  issues: write
+  contents: read
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Get changed files
+        run: |
+          git diff --name-only origin/${{ github.base_ref }}...HEAD > changes.txt
+          cat changes.txt
+
+      - name: Validate JSON
+        run: |
+          set +e
+          node scripts/validate-json.js
+          echo $? > exit_code.txt
+          set -e
+
+      - name: Close PR if reserved subdomain detected
+        if: always()
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          EXIT_CODE=$(cat exit_code.txt)
+
+          if [ "$EXIT_CODE" -eq 5 ]; then
+            echo "Closing PR via custom script..."
+            node scripts/close-pr.js
+            exit 0
+          fi
+
+          if [ "$EXIT_CODE" -ne 0 ]; then
+            echo "Validation failed"
+            exit "$EXIT_CODE"
+          fi
+
+          echo "Validation passed"
