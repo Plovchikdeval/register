@@ -4,12 +4,12 @@
     "email": "nloveuser@gmail.com",
     "discord": "nloveuser"
   },
-  "subdomain": "nloverx",
+  "subdomain": "unhapp",
   "records": [
     {
       "type": "CNAME",
-      "name": "nloverx",
-      "value": "nloveuser.xyz"
+      "name": "unhapp",
+      "value": "unhapp.nloveuser.xyz"
     }
   ]
 }
